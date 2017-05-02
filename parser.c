@@ -28,6 +28,7 @@ struct options *push_back(struct options* lst, char *name)
   {
     lst = malloc(sizeof (struct options));
     lst->name = name;
+    lst->arguments = NULL;
     lst->next = NULL;
     return lst;
   }
@@ -35,6 +36,7 @@ struct options *push_back(struct options* lst, char *name)
   {
     lst->next = malloc(sizeof (struct options));
     lst->next->name = name;
+    lst->next->arguments = NULL;
     lst->next->next = NULL;
     return save;
   }
@@ -55,14 +57,6 @@ int size_strr(char** str)
   return i;
 }
 
-char* cpy_str(char* str)
-{
-  char* res = malloc(str_size(str));
-  for (int i = 0; str[i] != 0; ++i)
-    res[i] = str[i];
-  return res;
-}
-
 struct options* add_argument(struct options* opt, char *name, char *args)
 {
   struct options* save  = opt;
@@ -72,13 +66,14 @@ struct options* add_argument(struct options* opt, char *name, char *args)
   }
   if (!opt->arguments)
   {
-    opt->arguments = malloc(sizeof (char*));
+    opt->arguments = malloc(sizeof (char*) * 2);
     opt->arguments[0] = args;
+    opt->arguments[1] = NULL;
     return save;
   }
   int size = size_strr(opt->arguments);
   opt->arguments = realloc(opt->arguments, (size + 2) * sizeof (char*));
-  opt->arguments[size] = cpy_str(args);
+  opt->arguments[size] = args;
   opt->arguments[size + 1] = NULL;
   return save;
 }
