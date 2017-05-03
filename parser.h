@@ -7,12 +7,13 @@ struct option_manager
 
 struct options
 {
+  int nb_opt;
   char* name;
   char** arguments;
   struct options *next;
 };
 
-struct options *push_back(struct options* opt, char* name);
+struct options *push_back(struct options* opt, char* name, int nb);
 void free_options(struct options* opt);
 struct options *add_argument(struct options* opt, char *name, char *args);
 int str_compare(char* str1, char* str2);
