@@ -103,9 +103,24 @@ struct option_manager* add_options(struct option_manager* opt, int count, ...)
 {
   va_list ap;
   va_start(ap, count);
-  opt->options = malloc(sizeof (char*) * count);
-  for (int i = 0; i < count; i++)
-    opt->options[i] = va_arg(ap, char*);
+  opt->options = malloc(sizeof (char*) * (count / 2));
+  opt->nb_param = malloc(sizeof (int) * (count / 2));
+  int pair = 0;
+  int j = 0;
+  for (int i = 0; i < count;) 
+  {
+    if (pair == 0)
+    {
+      opt->options[i] = va_arg(ap, char*);
+      i++;
+    }
+    else
+    {
+      opt->nb_param[i] = va_arg(ap, int);
+      j++;
+    }
+    pair = !pair;
+  }
   return opt;
 }
 
@@ -142,7 +157,7 @@ struct option_manager* parse(int argc, char** argv)
 {
   char* last_opt = NULL;
   struct option_manager* manager = malloc(sizeof (struct option_manager));
-  manager = add_options(manager, 2, "-p\0", "-T\0");
+  manager = add_options(manager, 3, "-a\0", -1, "-T\0", -1,"-p\0", -1);
   manager->opts = NULL;
   for (int i = 1; i < argc; ++i)
   {

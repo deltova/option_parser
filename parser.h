@@ -1,6 +1,7 @@
 struct option_manager
 {
   char** options;
+  int* nb_param;
   struct options* opts;
 };
 
